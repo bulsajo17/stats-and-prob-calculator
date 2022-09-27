@@ -7,23 +7,60 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CalculatorTests {
 
-    int[] objects = {6, 7, 5};
+    double delta = 0.0001;
+
+    @Test
+    public void testOperationsSuite()
+    {
+        double[] probabilities = {0.14, 0.10, 0.06};
+
+        double p;
+
+        p = Operations.intersection(probabilities[0], probabilities[1]);
+
+        assertEquals(0.014, p, delta);
+
+        p = Operations.union(probabilities[0], probabilities[1]);
+
+        assertEquals(0.226, p, delta);
+
+        p = Operations.exclusive(probabilities[0], probabilities[1]);
+
+        assertEquals(0.212, p, delta);
+
+        p = Operations.single(probabilities[0], probabilities[1]);
+
+        assertEquals(0.126, p, delta);
+
+        p = Operations.conditional(probabilities[0], probabilities[1]);
+
+        assertEquals(0.1, p, delta);
+
+    }
 
     @Test
     public void testCombinationSuite()
     {
+        int[] events = {6, 7, 5};
+
         double p;
-        p = Combination.pAllSame(objects, 3);
+
+        p = Combination.pAllSame(events, 3);
         assertEquals(0.07965686274509803, p);
 
-        p = Combination.pExactlySame(objects, 3, 2, 2);
+        p = Combination.pExactlySame(events, 3, 2, 2);
         assertEquals(0.15931372549019607, p);
 
-        p = Combination.pOneEach(objects);
+        p = Combination.pOneEach(events);
         assertEquals(0.25735294117647056, p);
 
-        p = Combination.pNSelections(objects, 5, 2);
+        p = Combination.pNSelections(events, 5, 2);
         assertEquals(0.15021008403361344, p);
+
+        events = new int[]{10, 8, 6};
+
+        p = Combination.sAllSame(events, 3, 0);
+        assertEquals(120, p, delta);
     }
 
     @Test
@@ -33,6 +70,15 @@ public class CalculatorTests {
         Matrix.setup(values, 2, 3);
         double p;
         p = Matrix.pRow(1);
+        assertEquals(.40, p);
+
+        p = Matrix.pCol(0);
+        assertEquals(.36, p);
+
+        values = new double[]{.03, 0.02, 0.03, 0.05, 0.15, 0.07, 0.04, 0.02, 0.08};
+        Matrix.setup(values, 3, 3);
+
+
     }
 
 

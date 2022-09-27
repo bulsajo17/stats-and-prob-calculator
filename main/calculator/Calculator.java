@@ -5,43 +5,6 @@ import java.util.HashMap;
 
 public class Calculator {
 
-    static int id = 0;
-
-    public Calculator()
-    {
-        id++;
-    }
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public double cProb(int PLCHLDR)
-    {
-        return PLCHLDR;
-    }
-
-    public double cProb(int PLCHLDR1, int PLCHLDR2)
-    {
-        return PLCHLDR1 + PLCHLDR2;
-    }
-
-    public HashMap<String, Double> cProbDependent(double eA, double eB, double eAorB)
-    {
-        HashMap<String, Double> outcomes = new HashMap<>();
-
-        double both = eA + eB - eAorB;
-
-        outcomes.put("both", both);
-
-        double neither = 1 - eAorB;
-
-        outcomes.put("neither", neither);
-
-        return outcomes;
-    }
-
     private static long factorial(int n)
     {
         long fact = n;
@@ -75,6 +38,69 @@ public class Calculator {
         return ((double) factorial(n)) / factorial(n - r);
     }
 
+    static class Operations {
+
+
+        /**
+         * Calculates the intersection of two independent events
+         *
+         * @param a event one
+         * @param b event two
+         * @return the probability that both events happen
+         */
+        public static double intersection(double a, double b)
+        {
+            double i;
+            i = a * b;
+            return i;
+        }
+
+        /**
+         * Calculates the union of two independent events
+         *
+         * @param a event one
+         * @param b event two
+         * @return the probability that either both events happen or just one event happens
+         */
+        public static double union (double a, double b)
+        {
+            double u = a + b;
+            u -= intersection(a, b);
+            return u;
+        }
+
+        /**
+         * Returns the conditional probability of b, given a has happened.
+         *
+         * @param a the event that has happened
+         * @param b the event that is conditionally dependent on a
+         * @return the conditional probability
+         */
+        public static double conditional(double a, double b)
+        {
+            double p;
+            p = intersection(a, b)/a;
+            return p;
+        }
+
+        public static double exclusive(double a, double b)
+        {
+            return union(a, b) - intersection(a, b);
+        }
+
+        /**
+         * Calculates the probability that event a happens, but NOT event b
+         *
+         * @param a the event to occur
+         * @param b the event that should not occur
+         * @return the probability of a not b
+         */
+        public static double single(double a, double b)
+        {
+            return a * (1-b);
+        }
+    }
+
     static class Combination {
 
         /**
@@ -85,7 +111,20 @@ public class Calculator {
          * @return the value of the combination
          */
         public static double nCr(int n, int r) {
-            return ((double) factorial(n)) / (factorial(r) * (factorial(n - r)));
+            return (double)(factorial(n)) / (factorial(r) * (factorial(n - r)));
+        }
+
+        /**
+         * Calculates number of selections that results in all selections being from posSelection
+         *
+         * @param objects the list of selection choices
+         * @param numSelection the number of selections to be made
+         * @param posSelection which selection we want
+         * @return the number of selections that result in all selections being from posSelection
+         */
+        public static double sAllSame(int[] objects, int numSelection, int posSelection)
+        {
+           return nCr(objects[posSelection], numSelection);
         }
 
         /**
@@ -99,9 +138,26 @@ public class Calculator {
             double p = 0.0;
             for (int object : objects) {
                 p += nCr(object, numSelection);
-                //System.out.println(p);
             }
             p /= nCr(sum(objects), numSelection);
+            //System.out.println(p);
+            return p;
+        }
+
+        /**
+         * Calculates probability that all selections have the same outcome
+         *
+         * @param objects      array of events
+         * @param numSelection number of selections to make
+         * @param posSelection which event we want the selections to be
+         * @return the probability that all selections are from posSelection
+         */
+        public static double pAllSame(int[] objects, int numSelection, int posSelection)
+        {
+            double p = 0.0;
+            p += nCr(objects[posSelection], numSelection);
+            p /= nCr(sum(objects), numSelection);
+            System.out.println(sum(objects));
             return p;
         }
 
@@ -169,6 +225,21 @@ public class Calculator {
                 p += x;
             }
             return p;
+        }
+
+        public static double pCol(int col)
+        {
+            double p = 0.0;
+            for (double[] x : pMatrix)
+            {
+                p += x[col];
+            }
+            return p;
+        }
+
+        public static double retrieveValue(int row, int col)
+        {
+            return pMatrix[row][col];
         }
 
     }
