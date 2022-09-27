@@ -194,7 +194,8 @@ public class Calculator {
 
     }
 
-    public static class Matrix {
+    public static class Matrix
+    {
 
         private static double[][] pMatrix;
 
@@ -242,6 +243,52 @@ public class Calculator {
             return pMatrix[row][col];
         }
 
+    }
+
+    public static class PMF
+    {
+        private static double[] PMF;
+
+        public static void setup(double[] inputArray)
+        {
+            PMF = inputArray;
+        }
+
+        public static double pLessThan(int num)
+        {
+            double p = 0;
+            for (int i = 0; i < num; i++)
+            {
+                p += PMF[i];
+            }
+            return p;
+        }
+
+        public static double pMoreThan(int num)
+        {
+            double p = 0;
+            for (int i = num; i < PMF.length; i++)
+            {
+                p += PMF[i];
+            }
+            return p;
+        }
+
+        public static double pBetween(int num1, int num2)
+        {
+            double p = 0;
+            for (int i = num1; i < num2; i++)
+            {
+                p += PMF[i];
+            }
+            return p;
+        }
+
+    }
+
+    public static class CDF
+    {
+        
     }
 }
 

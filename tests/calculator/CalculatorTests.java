@@ -81,5 +81,24 @@ public class CalculatorTests {
 
     }
 
+    @Test
+    public void testPMFSuite()
+    {
+        double[] inputPMF = {0.11, 0.15, .2, .25, .19, .09, .01};
+
+        PMF.setup(inputPMF);
+
+        double p;
+
+        p = PMF.pLessThan(4);
+        assertEquals(0.71, p);
+
+        p = PMF.pMoreThan(3);
+        assertEquals(0.54, p);
+
+        p = PMF.pBetween(2, 6);
+        assertEquals(0.73, p);
+    }
+
 
 }
